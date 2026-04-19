@@ -1,0 +1,25 @@
+name: Java CI with Maven - Smoke Test
+
+# 触发时机：当有代码推送到 main 分支时，自动触发此流水线
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 在云服务器上安装与你本地一致的 JDK 25 环境
+      - name: Set up JDK 25
+        uses: actions/setup-java@v3
+        with:
+          java-version: '25' # 已经为你改成了 25！
+          distribution: 'oracle' # 对于前沿版本，通常使用 oracle 或 zulu 发行版最稳妥
+          cache: maven
+
+      - name: Run Smoke Test with Maven
+        run: mvn test
